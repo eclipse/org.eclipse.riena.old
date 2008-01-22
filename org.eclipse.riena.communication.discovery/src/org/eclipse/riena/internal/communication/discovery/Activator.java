@@ -72,7 +72,7 @@ public class Activator implements BundleActivator {
         // };
         // t.start();
 
-        servicePublisherReg = factory.createAndRegisterProxy(IServicePublishEventDispatcher.class, "http://${localhost}/hessian/ServicePublisherWS", "hessian",
+        servicePublisherReg = factory.createAndRegisterProxy(IServicePublishEventDispatcher.class, "http://${hostname}/hessian/ServicePublisherWS", "hessian",
                 null, HOST_ID);
 
         ProtocolNotifier protNotifier = new ProtocolNotifier();
