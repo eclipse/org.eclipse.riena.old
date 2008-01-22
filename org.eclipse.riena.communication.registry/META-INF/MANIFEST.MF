@@ -7,3 +7,4 @@ Bundle-Activator: org.eclipse.riena.internal.communication.registry.Activator
 Require-Bundle: org.eclipse.riena.communication.core
 Import-Package: org.osgi.framework;version="1.4.0",
  org.osgi.service.cm;version="1.2.0"
+Riena-ForceStart: true
