@@ -18,13 +18,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.eclipse.equinox.log.Logger;
 import org.eclipse.riena.communication.core.IRemoteServiceReference;
 import org.eclipse.riena.communication.core.IRemoteServiceRegistration;
 import org.eclipse.riena.communication.core.IRemoteServiceRegistry;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ManagedService;
+import org.osgi.service.log.LogService;
 
 /**
  * @author Alexander Ziegler
@@ -34,6 +38,7 @@ import org.osgi.service.cm.ManagedService;
 public class RemoteServiceRegistry implements IRemoteServiceRegistry {
 	private Map<String, IRemoteServiceRegistration> registeredServices;
 	private BundleContext context;
+	private Logger LOGGER = Activator.getDefault().getLogger(RemoteServiceRegistry.class.getName());
 
 	synchronized void start() {
 		registeredServices = new HashMap<String, IRemoteServiceRegistration>();
@@ -43,7 +48,8 @@ public class RemoteServiceRegistry implements IRemoteServiceRegistry {
 	synchronized void stop() {
 		// @TODO unregisterService changes the registeredServices collection,
 		// the for loop collapses with ConcurrentModificationException
-		IRemoteServiceRegistration[] arrayRS = registeredServices.values().toArray(new IRemoteServiceRegistration[registeredServices.values().size()]);
+		IRemoteServiceRegistration[] arrayRS = registeredServices.values().toArray(
+				new IRemoteServiceRegistration[registeredServices.values().size()]);
 		for (IRemoteServiceRegistration serviceReg : arrayRS) {
 			// unregisters all services for this registry
 			unregisterService(serviceReg.getReference());
@@ -59,6 +65,23 @@ public class RemoteServiceRegistry implements IRemoteServiceRegistry {
 	 */
 	public IRemoteServiceRegistration registerService(IRemoteServiceReference reference) {
 
+		String pid = reference.getConfigServicePID();
+		if (pid != null) {
+			ServiceReference[] refs;
+			try {
+				refs = Activator.getContext().getServiceReferences(ManagedService.class.getName(),
+						"(" + Constants.SERVICE_PID + "=" + pid + ")");
+				if (refs != null && refs.length > 0) {
+					LOGGER.log(LogService.LOG_ERROR, "duplicate configuration " + Constants.SERVICE_PID + " = "
+							+ reference.getConfigServicePID() + " for service "
+							+ reference.getServiceInterfaceClassName() + " service is set to NOT configurable");
+					pid = null;
+				}
+			} catch (InvalidSyntaxException e) {
+				e.printStackTrace();
+			}
+		}
+
 		String url = reference.getDescription().getURL();
 		synchronized (registeredServices) {
 			IRemoteServiceRegistration foundRemoteServiceReg = registeredServices.get(url);
@@ -67,20 +90,22 @@ public class RemoteServiceRegistry implements IRemoteServiceRegistry {
 				Properties props = new Properties();
 				props.put("service.url", url);
 				props.put("service.protocol", reference.getDescription().getProtocol());
-				ServiceRegistration serviceRegistration = context.registerService(reference.getServiceInterfaceClassName(), reference.getServiceInstance(),
-						props);
+				ServiceRegistration serviceRegistration = context.registerService(reference
+						.getServiceInterfaceClassName(), reference.getServiceInstance(), props);
 				reference.setServiceRegistration(serviceRegistration);
 
-				if (reference.getConfigServiceInstance() != null && reference.getConfigServicePID() != null) {
+				if (reference.getConfigServiceInstance() != null && pid != null) {
 					Hashtable<String, String> ht = new Hashtable<String, String>();
-					ht.put(Constants.SERVICE_PID, reference.getConfigServicePID());
-					reference.setConfigServiceRegistration(context.registerService(ManagedService.class.getName(), reference.getConfigServiceInstance(), ht));
+					ht.put(Constants.SERVICE_PID, pid);
+					reference.setConfigServiceRegistration(context.registerService(ManagedService.class.getName(),
+							reference.getConfigServiceInstance(), ht));
 				}
 
 				RemoteServiceRegistration remoteServiceReg = new RemoteServiceRegistration(reference, this);
 				registeredServices.put(url, remoteServiceReg);
 
-				System.out.println("Riena::RemoteServiceRegistry:: DEBUG: OSGi NEW service registered id: " + reference.getServiceInterfaceClassName());
+				System.out.println("Riena::RemoteServiceRegistry:: DEBUG: OSGi NEW service registered id: "
+						+ reference.getServiceInterfaceClassName());
 				return remoteServiceReg;
 			} else {
 				// for existing services copy over the service registration

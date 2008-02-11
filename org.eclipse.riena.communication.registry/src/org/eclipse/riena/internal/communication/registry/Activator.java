@@ -12,59 +12,75 @@ package org.eclipse.riena.internal.communication.registry;
 
 import java.util.Hashtable;
 
+import org.eclipse.core.runtime.Plugin;
+import org.eclipse.equinox.log.Logger;
 import org.eclipse.riena.communication.core.IRemoteServiceRegistry;
-import org.osgi.framework.BundleActivator;
+import org.eclipse.riena.core.logging.LogUtil;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-
 
 /**
  * @author Alexander Ziegler
  * @author Christian Campo
  * 
  */
-public class Activator implements BundleActivator {
+public class Activator extends Plugin {
 
-    private static BundleContext CONTEXT;
-    private RemoteServiceRegistry serviceRegistry;
-    private ServiceRegistration regServiceRegistry;
+	private static BundleContext CONTEXT;
+	private static Activator plugin;
+	private RemoteServiceRegistry serviceRegistry;
+	private ServiceRegistration regServiceRegistry;
+	private LogUtil logUtil;
 
-    /**
-     * The constructor
-     */
-    public Activator() {
-    }
+	/**
+	 * The constructor
+	 */
+	public Activator() {
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.core.runtime.Plugins#start(org.osgi.framework.BundleContext)
-     */
-    public void start(BundleContext context) throws Exception {
-        CONTEXT = context;
-        serviceRegistry = new RemoteServiceRegistry();
-        serviceRegistry.start();
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.core.runtime.Plugins#start(org.osgi.framework.BundleContext)
+	 */
+	public void start(BundleContext context) throws Exception {
+		CONTEXT = context;
+		plugin = this;
+		serviceRegistry = new RemoteServiceRegistry();
+		serviceRegistry.start();
 
-        Hashtable<String, Object> properties = new Hashtable<String, Object>(1);
-        regServiceRegistry = context.registerService(IRemoteServiceRegistry.ID, serviceRegistry, properties);
-    }
+		Hashtable<String, Object> properties = new Hashtable<String, Object>(1);
+		regServiceRegistry = context.registerService(IRemoteServiceRegistry.ID, serviceRegistry, properties);
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.core.runtime.Plugin#stop(org.osgi.framework.BundleContext)
-     */
-    public void stop(BundleContext context) throws Exception {
-        regServiceRegistry.unregister();
-        regServiceRegistry = null;
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.core.runtime.Plugin#stop(org.osgi.framework.BundleContext)
+	 */
+	public void stop(BundleContext context) throws Exception {
+		regServiceRegistry.unregister();
+		regServiceRegistry = null;
 
-        serviceRegistry.stop();
-        serviceRegistry = null;
-        CONTEXT = null;
-    }
+		serviceRegistry.stop();
+		serviceRegistry = null;
+		CONTEXT = null;
+		plugin = null;
+	}
 
-    public static BundleContext getContext() {
-        return CONTEXT;
-    }
+	public static BundleContext getContext() {
+		return CONTEXT;
+	}
+
+	public static Activator getDefault() {
+		return plugin;
+	}
+
+	public Logger getLogger(String name) {
+		if (logUtil == null) {
+			logUtil = new LogUtil(CONTEXT);
+		}
+		return logUtil.getLogger(name);
+	}
 
 }
