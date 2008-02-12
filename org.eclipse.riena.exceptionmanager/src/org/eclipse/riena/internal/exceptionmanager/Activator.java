@@ -14,7 +14,8 @@ import java.util.Hashtable;
 
 import org.eclipse.riena.core.exception.IExceptionHandler;
 import org.eclipse.riena.core.exception.IExceptionHandlerManager;
-import org.eclipse.riena.core.service.ServiceInjector;
+import org.eclipse.riena.core.service.Injector;
+import org.eclipse.riena.core.service.ServiceId;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -24,7 +25,7 @@ public class Activator implements BundleActivator {
 
 	private BundleContext context;
 
-	private ServiceInjector handlerManagerInjector;
+	private Injector handlerManagerInjector;
 
 	private ServiceRegistration handlerManagerReg;
 
@@ -39,11 +40,8 @@ public class Activator implements BundleActivator {
 	private void registerExceptionHandlerManager() {
 		ExceptionHandlerManagerDefault handlerManager = new ExceptionHandlerManagerDefault();
 		String handlerId = IExceptionHandler.ID;
-		String bindMethod = "addHandler";
-		String unbindMethod = "removeHandler";
 
-		handlerManagerInjector = new ServiceInjector(context, handlerId, handlerManager, bindMethod, unbindMethod);
-		handlerManagerInjector.start();
+		handlerManagerInjector = new ServiceId(handlerId).injectInto(handlerManager).start(context);
 
 		Hashtable<String, String> properties = new Hashtable<String, String>(0);
 		handlerManagerReg = context.registerService(IExceptionHandlerManager.ID, handlerManager, properties);
@@ -79,7 +77,7 @@ public class Activator implements BundleActivator {
 
 		handlerManagerReg.unregister();
 		handlerManagerReg = null;
-		handlerManagerInjector.dispose();
+		handlerManagerInjector.stop();
 		handlerManagerInjector = null;
 	}
 }
