@@ -15,97 +15,96 @@ import org.eclipse.riena.communication.core.IRemoteServiceRegistry;
 import org.eclipse.riena.communication.core.factory.IRemoteServiceFactory;
 import org.eclipse.riena.communication.core.factory.RemoteServiceFactory;
 import org.eclipse.riena.communication.core.publisher.IServicePublishEventDispatcher;
-import org.eclipse.riena.core.service.ServiceInjector;
+import org.eclipse.riena.core.service.Injector;
+import org.eclipse.riena.core.service.ServiceId;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 
-
 public class Activator implements BundleActivator {
 
-    private RemoteServiceDiscovery discovery;
-    private ServiceInjector registryInjector;
-    private String HOST_ID = Activator.class.getName();
-    private IRemoteServiceRegistration servicePublisherReg;
+	private RemoteServiceDiscovery discovery;
+	private Injector registryInjector;
+	private String HOST_ID = Activator.class.getName();
+	private IRemoteServiceRegistration servicePublisherReg;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
-     */
-    public void start(BundleContext context) throws Exception {
-        RemoteServiceFactory factory = new RemoteServiceFactory();
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
+	 */
+	public void start(BundleContext context) throws Exception {
+		RemoteServiceFactory factory = new RemoteServiceFactory();
 
-        discovery = new RemoteServiceDiscovery(context);
-        discovery.setRemoteServiceFactory(factory);
+		discovery = new RemoteServiceDiscovery(context);
+		discovery.setRemoteServiceFactory(factory);
 
-        registryInjector = new ServiceInjector(context, IRemoteServiceRegistry.ID, discovery, "setRemoteServiceRegistry", "setRemoteServiceRegistry");
-        registryInjector.start();
-        discovery.start();
+		registryInjector = new ServiceId(IRemoteServiceRegistry.ID).injectInto(discovery).start(context);
+		discovery.start();
 
-        // Thread t = new Thread() {
-        // public void run() {
-        // boolean firstRun = true;
-        // agent.start();
-        // System.out.println("thread start");
-        // while (true) {
-        // try {
-        // if (firstRun) {
-        // Thread.sleep(1000);
-        // } else {
-        // Thread.sleep(10000);
-        // }
-        // firstRun = false;
-        // } catch (InterruptedException e) {
-        // // TODO Auto-generated catch block
-        // e.printStackTrace();
-        // }
-        // if (agent != null) {
-        // agent.update();
-        // } else {
-        // break;
-        // }
-        // }
-        // System.out.println("thread end");
-        // }
-        // };
-        // t.start();
+		// Thread t = new Thread() {
+		// public void run() {
+		// boolean firstRun = true;
+		// agent.start();
+		// System.out.println("thread start");
+		// while (true) {
+		// try {
+		// if (firstRun) {
+		// Thread.sleep(1000);
+		// } else {
+		// Thread.sleep(10000);
+		// }
+		// firstRun = false;
+		// } catch (InterruptedException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// if (agent != null) {
+		// agent.update();
+		// } else {
+		// break;
+		// }
+		// }
+		// System.out.println("thread end");
+		// }
+		// };
+		// t.start();
 
-        servicePublisherReg = factory.createAndRegisterProxy(IServicePublishEventDispatcher.class, "http://${hostname}/hessian/ServicePublisherWS", "hessian",
-                null, HOST_ID);
+		servicePublisherReg = factory.createAndRegisterProxy(IServicePublishEventDispatcher.class,
+				"http://${hostname}/hessian/ServicePublisherWS", "hessian", null, HOST_ID);
 
-        ProtocolNotifier protNotifier = new ProtocolNotifier();
-        context.addServiceListener(protNotifier, "(objectClass=" + IRemoteServiceFactory.ID + ")");
+		ProtocolNotifier protNotifier = new ProtocolNotifier();
+		context.addServiceListener(protNotifier, "(objectClass=" + IRemoteServiceFactory.ID + ")");
 
-        // ToDo Service Update Listener
+		// ToDo Service Update Listener
 
-        discovery.update();
-    }
+		discovery.update();
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
-     */
-    public void stop(BundleContext context) throws Exception {
-        discovery.stop();
-        registryInjector.dispose();
-        if (servicePublisherReg != null) {
-            servicePublisherReg.unregister();
-        }
-        discovery = null;
-        registryInjector = null;
-        servicePublisherReg = null;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
+	 */
+	public void stop(BundleContext context) throws Exception {
+		discovery.stop();
+		registryInjector.stop();
+		if (servicePublisherReg != null) {
+			servicePublisherReg.unregister();
+		}
+		discovery = null;
+		registryInjector = null;
+		servicePublisherReg = null;
+	}
 
-    class ProtocolNotifier implements ServiceListener {
-        public void serviceChanged(ServiceEvent event) {
-            if (event.getType() == ServiceEvent.REGISTERED) {
-                String protocol = (String) event.getServiceReference().getProperty(IRemoteServiceFactory.PROP_PROTOCOL);
-                discovery.checkForUnpublishedServices(protocol);
-            }
-        }
+	class ProtocolNotifier implements ServiceListener {
+		public void serviceChanged(ServiceEvent event) {
+			if (event.getType() == ServiceEvent.REGISTERED) {
+				String protocol = (String) event.getServiceReference().getProperty(IRemoteServiceFactory.PROP_PROTOCOL);
+				discovery.checkForUnpublishedServices(protocol);
+			}
+		}
 
-    }
+	}
 }
