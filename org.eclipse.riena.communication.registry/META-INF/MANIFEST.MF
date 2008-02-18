@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Riena Communication Registry (Incubation)
 Bundle-SymbolicName: org.eclipse.riena.communication.registry
-Bundle-Version: 0.0.1
+Bundle-Version: 1.0.0.M1
 Bundle-Activator: org.eclipse.riena.internal.communication.registry.Activator
 Require-Bundle: org.eclipse.riena.communication.core,
  org.eclipse.equinox.log,
