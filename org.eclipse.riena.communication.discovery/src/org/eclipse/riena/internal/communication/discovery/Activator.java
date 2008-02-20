@@ -40,7 +40,7 @@ public class Activator implements BundleActivator {
 		discovery = new RemoteServiceDiscovery(context);
 		discovery.setRemoteServiceFactory(factory);
 
-		registryInjector = new ServiceId(IRemoteServiceRegistry.ID).injectInto(discovery).start(context);
+		registryInjector = new ServiceId(IRemoteServiceRegistry.ID).injectInto(discovery).andStart(context);
 		discovery.start();
 
 		// Thread t = new Thread() {

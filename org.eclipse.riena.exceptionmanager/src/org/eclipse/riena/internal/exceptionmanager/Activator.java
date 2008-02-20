@@ -41,7 +41,7 @@ public class Activator implements BundleActivator {
 		ExceptionHandlerManagerDefault handlerManager = new ExceptionHandlerManagerDefault();
 		String handlerId = IExceptionHandler.ID;
 
-		handlerManagerInjector = new ServiceId(handlerId).injectInto(handlerManager).start(context);
+		handlerManagerInjector = new ServiceId(handlerId).injectInto(handlerManager).andStart(context);
 
 		Hashtable<String, String> properties = new Hashtable<String, String>(0);
 		handlerManagerReg = context.registerService(IExceptionHandlerManager.ID, handlerManager, properties);
