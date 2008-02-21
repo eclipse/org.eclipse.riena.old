@@ -8,7 +8,7 @@
  * Contributors:
  *    compeople AG - initial API and implementation
  *******************************************************************************/
-package org.eclipse.riena.security.common.bootpolicy;
+package org.eclipse.riena.internal.security.common.bootpolicy;
 
 import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;

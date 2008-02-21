@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Policyproxy Plug-in
 Bundle-SymbolicName: org.eclipse.riena.security.common.bootpolicy
 Bundle-Version: 1.0.0.M1
-Bundle-Activator: org.eclipse.riena.security.common.bootpolicy.Activator
+Bundle-Activator: org.eclipse.riena.internal.security.common.bootpolicy.Activator
 Require-Bundle: org.eclipse.core.runtime
 Eclipse-LazyStart: true
 Export-Package: org.eclipse.riena.security.common.bootpolicy
