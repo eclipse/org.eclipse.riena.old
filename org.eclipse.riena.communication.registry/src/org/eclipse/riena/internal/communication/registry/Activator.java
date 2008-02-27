@@ -12,9 +12,8 @@ package org.eclipse.riena.internal.communication.registry;
 
 import java.util.Hashtable;
 
-import org.eclipse.core.runtime.Plugin;
-import org.eclipse.equinox.log.Logger;
 import org.eclipse.riena.communication.core.IRemoteServiceRegistry;
+import org.eclipse.riena.core.RienaPlugin;
 import org.eclipse.riena.core.logging.LogUtil;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -24,19 +23,12 @@ import org.osgi.framework.ServiceRegistration;
  * @author Christian Campo
  * 
  */
-public class Activator extends Plugin {
+public class Activator extends RienaPlugin {
 
-	private static BundleContext CONTEXT;
 	private static Activator plugin;
 	private RemoteServiceRegistry serviceRegistry;
 	private ServiceRegistration regServiceRegistry;
 	private LogUtil logUtil;
-
-	/**
-	 * The constructor
-	 */
-	public Activator() {
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -44,7 +36,7 @@ public class Activator extends Plugin {
 	 * @see org.eclipse.core.runtime.Plugins#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
-		CONTEXT = context;
+		super.start(context);
 		plugin = this;
 		serviceRegistry = new RemoteServiceRegistry();
 		serviceRegistry.start();
@@ -64,23 +56,12 @@ public class Activator extends Plugin {
 
 		serviceRegistry.stop();
 		serviceRegistry = null;
-		CONTEXT = null;
 		plugin = null;
-	}
-
-	public static BundleContext getContext() {
-		return CONTEXT;
+		super.stop(context);
 	}
 
 	public static Activator getDefault() {
 		return plugin;
-	}
-
-	public synchronized Logger getLogger(String name) {
-		if (logUtil == null) {
-			logUtil = new LogUtil(CONTEXT);
-		}
-		return logUtil.getLogger(name);
 	}
 
 }

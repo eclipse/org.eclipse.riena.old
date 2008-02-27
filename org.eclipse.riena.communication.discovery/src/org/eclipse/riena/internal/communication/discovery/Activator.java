@@ -15,19 +15,21 @@ import org.eclipse.riena.communication.core.IRemoteServiceRegistry;
 import org.eclipse.riena.communication.core.factory.IRemoteServiceFactory;
 import org.eclipse.riena.communication.core.factory.RemoteServiceFactory;
 import org.eclipse.riena.communication.core.publisher.IServicePublishEventDispatcher;
+import org.eclipse.riena.core.RienaActivator;
 import org.eclipse.riena.core.service.Injector;
 import org.eclipse.riena.core.service.ServiceId;
-import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 
-public class Activator implements BundleActivator {
+public class Activator extends RienaActivator {
 
 	private RemoteServiceDiscovery discovery;
 	private Injector registryInjector;
 	private String HOST_ID = Activator.class.getName();
 	private IRemoteServiceRegistration servicePublisherReg;
+
+	private static Activator plugin;
 
 	/*
 	 * (non-Javadoc)
@@ -35,6 +37,8 @@ public class Activator implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
+		super.start(context);
+		plugin = this;
 		RemoteServiceFactory factory = new RemoteServiceFactory();
 
 		discovery = new RemoteServiceDiscovery(context);
@@ -42,34 +46,6 @@ public class Activator implements BundleActivator {
 
 		registryInjector = new ServiceId(IRemoteServiceRegistry.ID).injectInto(discovery).andStart(context);
 		discovery.start();
-
-		// Thread t = new Thread() {
-		// public void run() {
-		// boolean firstRun = true;
-		// agent.start();
-		// System.out.println("thread start");
-		// while (true) {
-		// try {
-		// if (firstRun) {
-		// Thread.sleep(1000);
-		// } else {
-		// Thread.sleep(10000);
-		// }
-		// firstRun = false;
-		// } catch (InterruptedException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// if (agent != null) {
-		// agent.update();
-		// } else {
-		// break;
-		// }
-		// }
-		// System.out.println("thread end");
-		// }
-		// };
-		// t.start();
 
 		servicePublisherReg = factory.createAndRegisterProxy(IServicePublishEventDispatcher.class,
 				"http://${hostname}/hessian/ServicePublisherWS", "hessian", null, HOST_ID);
@@ -96,6 +72,9 @@ public class Activator implements BundleActivator {
 		discovery = null;
 		registryInjector = null;
 		servicePublisherReg = null;
+		plugin = null;
+
+		super.stop(context);
 	}
 
 	class ProtocolNotifier implements ServiceListener {
@@ -106,5 +85,12 @@ public class Activator implements BundleActivator {
 			}
 		}
 
+	}
+
+	/**
+	 * @return
+	 */
+	public static Activator getDefault() {
+		return plugin;
 	}
 }
