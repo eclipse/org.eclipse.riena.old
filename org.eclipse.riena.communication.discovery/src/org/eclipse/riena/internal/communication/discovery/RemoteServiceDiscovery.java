@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import org.eclipse.equinox.log.Logger;
 import org.eclipse.riena.communication.core.IRemoteServiceReference;
 import org.eclipse.riena.communication.core.IRemoteServiceRegistration;
 import org.eclipse.riena.communication.core.IRemoteServiceRegistry;
@@ -25,6 +26,7 @@ import org.eclipse.riena.communication.core.factory.RemoteServiceFactory;
 import org.eclipse.riena.communication.core.publisher.IServicePublishEventDispatcher;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.log.LogService;
 
 import com.caucho.hessian.client.HessianRuntimeException;
 
@@ -40,6 +42,8 @@ public class RemoteServiceDiscovery {
 	private Map<String, RemoteServiceDescription> unpublishedServices = new HashMap<String, RemoteServiceDescription>();
 	private BundleContext context;
 
+	private final static Logger LOGGER = Activator.getDefault().getLogger(RemoteServiceDiscovery.class.getName());
+
 	RemoteServiceDiscovery(BundleContext context) {
 		super();
 		this.context = context;
@@ -53,9 +57,8 @@ public class RemoteServiceDiscovery {
 	private synchronized RemoteServiceDescription[] getAllServices() {
 		ServiceReference refPublisher = context.getServiceReference(IServicePublishEventDispatcher.ID);
 		if (refPublisher == null) {
-			System.out
-					.println("Riena::RemoteServiceDiscovery:: WARN no IServicePublishEventDispatcher service available ["
-							+ IServicePublishEventDispatcher.ID + "]");
+			LOGGER.log(LogService.LOG_WARNING, "no IServicePublishEventDispatcher service available ["
+					+ IServicePublishEventDispatcher.ID + "]");
 			return EMPTY_SERVICE_ENTRY_ARRAY;
 		}
 		IServicePublishEventDispatcher servicePublisher = (IServicePublishEventDispatcher) context
@@ -108,12 +111,12 @@ public class RemoteServiceDiscovery {
 			Class<?> interfaceClass = loadClass(rsDesc);
 			rsDesc.setServiceInterfaceClass(interfaceClass);
 
-			System.out.println("creating service with uri=" + rsDesc.getURL());
+			LOGGER.log(LogService.LOG_DEBUG, "creating service with uri=" + rsDesc.getURL());
 			IRemoteServiceReference rsRef = createReference(rsDesc);
 			if (rsRef != null) {
 				rsReferences.add(rsRef);
 			} else {
-				System.out.println("*****************");
+				LOGGER.log(LogService.LOG_DEBUG, "*****************");
 				addAsUnpublished(rsDesc);
 			}
 
@@ -163,9 +166,7 @@ public class RemoteServiceDiscovery {
 			return new RemoteServiceFactory().loadClass(interfaceClassName);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(
-					"Riena:Communication::RemoteServiceDiscovery:: ERROR could not create web service interface for ["
-							+ interfaceClassName + "]", e);
+			throw new RuntimeException("Could not create web service interface for [" + interfaceClassName + "]", e);
 		}
 	}
 
@@ -189,8 +190,7 @@ public class RemoteServiceDiscovery {
 					updateInRegistry(serviceDescriptions);
 				}
 			} catch (HessianRuntimeException ex) {
-				System.out.println("System::Riena:Communication::update of services from server failed. "
-						+ ex.getLocalizedMessage());
+				LOGGER.log(LogService.LOG_ERROR, "update of services from server failed. " + ex.getLocalizedMessage());
 			}
 		}
 	}

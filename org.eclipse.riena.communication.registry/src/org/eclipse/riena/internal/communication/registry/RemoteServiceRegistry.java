@@ -104,7 +104,7 @@ public class RemoteServiceRegistry implements IRemoteServiceRegistry {
 				RemoteServiceRegistration remoteServiceReg = new RemoteServiceRegistration(reference, this);
 				registeredServices.put(url, remoteServiceReg);
 
-				System.out.println("Riena::RemoteServiceRegistry:: DEBUG: OSGi NEW service registered id: "
+				LOGGER.log(LogService.LOG_DEBUG, "OSGi NEW service registered id: "
 						+ reference.getServiceInterfaceClassName());
 				return remoteServiceReg;
 			} else {
@@ -133,7 +133,7 @@ public class RemoteServiceRegistry implements IRemoteServiceRegistry {
 			String id = reference.getServiceInterfaceClassName();
 			registeredServices.remove(reference.getURL());
 			reference.dispose();
-			System.out.println("Riena::RemoteServiceRegistry:: DEBUG: OSGi service removed id: " + id);
+			LOGGER.log(LogService.LOG_DEBUG, "OSGi service removed id: " + id);
 		}
 	}
 
