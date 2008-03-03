@@ -200,6 +200,7 @@ org.eclipse.jdt.core.formatter.insert_new_line_in_empty_block=insert
 org.eclipse.jdt.core.formatter.insert_space_after_opening_angle_bracket_in_parameterized_type_reference=do not insert
 eclipse.preferences.version=1
 org.eclipse.jdt.core.compiler.problem.assertIdentifier=error
+org.eclipse.jdt.core.compiler.problem.nonExternalizedStringLiteral=warning
 org.eclipse.jdt.core.formatter.insert_space_before_comma_in_method_invocation_arguments=do not insert
 org.eclipse.jdt.core.formatter.insert_space_before_comma_in_allocation_expression=do not insert
 org.eclipse.jdt.core.formatter.insert_space_before_colon_in_assert=insert
