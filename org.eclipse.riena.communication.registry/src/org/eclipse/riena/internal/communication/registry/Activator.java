@@ -15,6 +15,7 @@ import java.util.Hashtable;
 import org.eclipse.riena.communication.core.IRemoteServiceRegistry;
 import org.eclipse.riena.core.RienaPlugin;
 import org.eclipse.riena.core.logging.LogUtil;
+import org.eclipse.riena.core.service.ServiceId;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
@@ -41,7 +42,7 @@ public class Activator extends RienaPlugin {
 		serviceRegistry = new RemoteServiceRegistry();
 		serviceRegistry.start();
 
-		Hashtable<String, Object> properties = new Hashtable<String, Object>(1);
+		Hashtable<String, Object> properties = ServiceId.newDefaultServiceProperties();
 		regServiceRegistry = context.registerService(IRemoteServiceRegistry.ID, serviceRegistry, properties);
 	}
 
