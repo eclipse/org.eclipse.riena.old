@@ -44,7 +44,8 @@ public class Activator extends RienaActivator {
 		discovery = new RemoteServiceDiscovery(context);
 		discovery.setRemoteServiceFactory(factory);
 
-		registryInjector = new ServiceId(IRemoteServiceRegistry.ID).injectInto(discovery).andStart(context);
+		registryInjector = new ServiceId(IRemoteServiceRegistry.ID).useRanking().injectInto(discovery)
+				.andStart(context);
 		discovery.start();
 
 		servicePublisherReg = factory.createAndRegisterProxy(IServicePublishEventDispatcher.class,
