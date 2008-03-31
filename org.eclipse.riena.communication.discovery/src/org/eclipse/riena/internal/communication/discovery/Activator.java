@@ -16,8 +16,8 @@ import org.eclipse.riena.communication.core.factory.IRemoteServiceFactory;
 import org.eclipse.riena.communication.core.factory.RemoteServiceFactory;
 import org.eclipse.riena.communication.core.publisher.IServicePublishEventDispatcher;
 import org.eclipse.riena.core.RienaActivator;
-import org.eclipse.riena.core.service.Injector;
-import org.eclipse.riena.core.service.ServiceId;
+import org.eclipse.riena.core.injector.Inject;
+import org.eclipse.riena.core.service.ServiceInjector;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
@@ -25,7 +25,7 @@ import org.osgi.framework.ServiceListener;
 public class Activator extends RienaActivator {
 
 	private RemoteServiceDiscovery discovery;
-	private Injector registryInjector;
+	private ServiceInjector registryInjector;
 	private String HOST_ID = Activator.class.getName();
 	private IRemoteServiceRegistration servicePublisherReg;
 
@@ -44,7 +44,7 @@ public class Activator extends RienaActivator {
 		discovery = new RemoteServiceDiscovery(context);
 		discovery.setRemoteServiceFactory(factory);
 
-		registryInjector = new ServiceId(IRemoteServiceRegistry.ID).useRanking().injectInto(discovery)
+		registryInjector = Inject.service(IRemoteServiceRegistry.ID).useRanking().into(discovery)
 				.andStart(context);
 		discovery.start();
 

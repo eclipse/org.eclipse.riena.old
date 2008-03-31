@@ -14,8 +14,8 @@ import java.util.Hashtable;
 
 import org.eclipse.riena.core.exception.IExceptionHandler;
 import org.eclipse.riena.core.exception.IExceptionHandlerManager;
-import org.eclipse.riena.core.service.Injector;
-import org.eclipse.riena.core.service.ServiceId;
+import org.eclipse.riena.core.injector.Inject;
+import org.eclipse.riena.core.service.ServiceInjector;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -25,7 +25,7 @@ public class Activator implements BundleActivator {
 
 	private BundleContext context;
 
-	private Injector handlerManagerInjector;
+	private ServiceInjector handlerManagerInjector;
 
 	private ServiceRegistration handlerManagerReg;
 
@@ -41,7 +41,7 @@ public class Activator implements BundleActivator {
 		ExceptionHandlerManagerDefault handlerManager = new ExceptionHandlerManagerDefault();
 		String handlerId = IExceptionHandler.ID;
 
-		handlerManagerInjector = new ServiceId(handlerId).injectInto(handlerManager).andStart(context);
+		handlerManagerInjector = Inject.service(handlerId).into(handlerManager).andStart(context);
 
 		Hashtable<String, String> properties = new Hashtable<String, String>(0);
 		handlerManagerReg = context.registerService(IExceptionHandlerManager.ID, handlerManager, properties);
