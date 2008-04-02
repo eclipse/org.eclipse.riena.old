@@ -55,10 +55,10 @@ public class RemoteServiceDiscovery {
 	 * @return
 	 */
 	private synchronized RemoteServiceDescription[] getAllServices() {
-		ServiceReference refPublisher = context.getServiceReference(IServicePublishEventDispatcher.ID);
+		ServiceReference refPublisher = context.getServiceReference(IServicePublishEventDispatcher.class.getName());
 		if (refPublisher == null) {
 			LOGGER.log(LogService.LOG_WARNING, "no IServicePublishEventDispatcher service available ["
-					+ IServicePublishEventDispatcher.ID + "]");
+					+ IServicePublishEventDispatcher.class.getName() + "]");
 			return EMPTY_SERVICE_ENTRY_ARRAY;
 		}
 		IServicePublishEventDispatcher servicePublisher = (IServicePublishEventDispatcher) context

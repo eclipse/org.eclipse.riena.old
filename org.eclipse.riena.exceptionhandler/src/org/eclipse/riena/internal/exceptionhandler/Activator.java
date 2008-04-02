@@ -30,7 +30,7 @@ public class Activator implements BundleActivator {
 		DefaultExceptionHandler handler = new DefaultExceptionHandler();
 
 		Hashtable<String, String> properties = new Hashtable<String, String>(0);
-		handlerReg = context.registerService(IExceptionHandler.ID, handler, properties);
+		handlerReg = context.registerService(IExceptionHandler.class.getName(), handler, properties);
 	}
 
 	/*

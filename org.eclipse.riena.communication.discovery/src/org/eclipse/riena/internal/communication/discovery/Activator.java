@@ -44,7 +44,7 @@ public class Activator extends RienaActivator {
 		discovery = new RemoteServiceDiscovery(context);
 		discovery.setRemoteServiceFactory(factory);
 
-		registryInjector = Inject.service(IRemoteServiceRegistry.ID).useRanking().into(discovery)
+		registryInjector = Inject.service(IRemoteServiceRegistry.class.getName()).useRanking().into(discovery)
 				.andStart(context);
 		discovery.start();
 
@@ -52,7 +52,7 @@ public class Activator extends RienaActivator {
 				"http://${hostname}/hessian/ServicePublisherWS", "hessian", null, HOST_ID);
 
 		ProtocolNotifier protNotifier = new ProtocolNotifier();
-		context.addServiceListener(protNotifier, "(objectClass=" + IRemoteServiceFactory.ID + ")");
+		context.addServiceListener(protNotifier, "(objectClass=" + IRemoteServiceFactory.class.getName() + ")");
 
 		// ToDo Service Update Listener
 
