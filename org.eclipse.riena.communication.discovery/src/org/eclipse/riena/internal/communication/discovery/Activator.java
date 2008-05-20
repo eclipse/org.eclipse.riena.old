@@ -29,16 +29,15 @@ public class Activator extends RienaActivator {
 	private String HOST_ID = Activator.class.getName();
 	private IRemoteServiceRegistration servicePublisherReg;
 
-	private static Activator plugin;
-
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
+	 * @see
+	 * org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext
+	 * )
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		plugin = this;
 		RemoteServiceFactory factory = new RemoteServiceFactory();
 
 		discovery = new RemoteServiceDiscovery(context);
@@ -62,7 +61,8 @@ public class Activator extends RienaActivator {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
+	 * @see
+	 * org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
 		discovery.stop();
@@ -73,7 +73,6 @@ public class Activator extends RienaActivator {
 		discovery = null;
 		registryInjector = null;
 		servicePublisherReg = null;
-		plugin = null;
 
 		super.stop(context);
 	}
@@ -88,10 +87,4 @@ public class Activator extends RienaActivator {
 
 	}
 
-	/**
-	 * @return
-	 */
-	public static Activator getDefault() {
-		return plugin;
-	}
 }
