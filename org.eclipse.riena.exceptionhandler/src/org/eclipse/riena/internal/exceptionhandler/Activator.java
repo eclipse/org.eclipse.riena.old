@@ -12,21 +12,24 @@ package org.eclipse.riena.internal.exceptionhandler;
 
 import java.util.Hashtable;
 
+import org.eclipse.riena.core.RienaActivator;
 import org.eclipse.riena.core.exception.IExceptionHandler;
-import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-public class Activator implements BundleActivator {
+public class Activator extends RienaActivator {
 
 	private ServiceRegistration handlerReg;
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
+	 * @see
+	 * org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext
+	 * )
 	 */
 	public void start(BundleContext context) throws Exception {
+		super.start(context);
 		DefaultExceptionHandler handler = new DefaultExceptionHandler();
 
 		Hashtable<String, String> properties = new Hashtable<String, String>(0);
@@ -36,11 +39,13 @@ public class Activator implements BundleActivator {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
+	 * @see
+	 * org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
 		handlerReg.unregister();
 		handlerReg = null;
+		super.stop(context);
 	}
 
 }

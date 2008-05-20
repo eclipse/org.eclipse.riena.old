@@ -12,66 +12,52 @@ package org.eclipse.riena.internal.exceptionmanager;
 
 import java.util.Hashtable;
 
+import org.eclipse.riena.core.RienaActivator;
 import org.eclipse.riena.core.exception.IExceptionHandler;
 import org.eclipse.riena.core.exception.IExceptionHandlerManager;
 import org.eclipse.riena.core.injector.Inject;
 import org.eclipse.riena.core.service.ServiceInjector;
-import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-public class Activator implements BundleActivator {
-	private static Activator plugin;
-
-	private BundleContext context;
+public class Activator extends RienaActivator {
 
 	private ServiceInjector handlerManagerInjector;
 
 	private ServiceRegistration handlerManagerReg;
 
-	public static Activator getPlugin() {
-		return plugin;
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext
+	 * )
+	 */
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
+		registerExceptionHandlerManager();
 	}
 
-	public BundleContext getContext() {
-		return context;
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
+	 */
+	public void stop(BundleContext context) throws Exception {
+		unregisterExceptionHandlerManager();
+		super.stop(context);
 	}
 
 	private void registerExceptionHandlerManager() {
 		ExceptionHandlerManagerDefault handlerManager = new ExceptionHandlerManagerDefault();
 		String handlerId = IExceptionHandler.class.getName();
 
-		handlerManagerInjector = Inject.service(handlerId).into(handlerManager).andStart(context);
+		handlerManagerInjector = Inject.service(handlerId).into(handlerManager).andStart(getContext());
 
 		Hashtable<String, String> properties = new Hashtable<String, String>(0);
-		handlerManagerReg = context.registerService(IExceptionHandlerManager.class.getName(), handlerManager,
+		handlerManagerReg = getContext().registerService(IExceptionHandlerManager.class.getName(), handlerManager,
 				properties);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
-	 */
-	public void start(BundleContext context) throws Exception {
-		plugin = this;
-		this.context = context;
-
-		registerExceptionHandlerManager();
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
-	 */
-	public void stop(BundleContext context) throws Exception {
-
-		unregisterExceptionHandlerManager();
-
-		this.context = null;
-		plugin = null;
 	}
 
 	private void unregisterExceptionHandlerManager() {
