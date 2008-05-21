@@ -21,6 +21,9 @@ public class Activator extends RienaActivator {
 
 	private ServiceRegistration handlerReg;
 
+	// The shared instance
+	private static Activator plugin;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -30,6 +33,7 @@ public class Activator extends RienaActivator {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+		Activator.plugin = this;
 		DefaultExceptionHandler handler = new DefaultExceptionHandler();
 
 		Hashtable<String, String> properties = new Hashtable<String, String>(0);
@@ -45,7 +49,17 @@ public class Activator extends RienaActivator {
 	public void stop(BundleContext context) throws Exception {
 		handlerReg.unregister();
 		handlerReg = null;
+		Activator.plugin = null;
 		super.stop(context);
+	}
+
+	/**
+	 * Get the plugin instance.
+	 * 
+	 * @return
+	 */
+	public static Activator getDefault() {
+		return plugin;
 	}
 
 }

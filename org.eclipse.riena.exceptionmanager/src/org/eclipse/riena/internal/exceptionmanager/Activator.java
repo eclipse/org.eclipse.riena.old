@@ -23,8 +23,10 @@ import org.osgi.framework.ServiceRegistration;
 public class Activator extends RienaActivator {
 
 	private ServiceInjector handlerManagerInjector;
-
 	private ServiceRegistration handlerManagerReg;
+
+	// The shared instance
+	private static Activator plugin;
 
 	/*
 	 * (non-Javadoc)
@@ -35,6 +37,7 @@ public class Activator extends RienaActivator {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+		Activator.plugin = this;
 		registerExceptionHandlerManager();
 	}
 
@@ -46,7 +49,17 @@ public class Activator extends RienaActivator {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		unregisterExceptionHandlerManager();
+		Activator.plugin = null;
 		super.stop(context);
+	}
+
+	/**
+	 * Get the plugin instance.
+	 * 
+	 * @return
+	 */
+	public static Activator getDefault() {
+		return plugin;
 	}
 
 	private void registerExceptionHandlerManager() {

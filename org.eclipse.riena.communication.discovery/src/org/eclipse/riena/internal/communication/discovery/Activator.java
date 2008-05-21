@@ -29,6 +29,9 @@ public class Activator extends RienaActivator {
 	private String HOST_ID = Activator.class.getName();
 	private IRemoteServiceRegistration servicePublisherReg;
 
+	// The shared instance
+	private static Activator plugin;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -38,6 +41,7 @@ public class Activator extends RienaActivator {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+		Activator.plugin = this;
 		RemoteServiceFactory factory = new RemoteServiceFactory();
 
 		discovery = new RemoteServiceDiscovery(context);
@@ -74,6 +78,7 @@ public class Activator extends RienaActivator {
 		registryInjector = null;
 		servicePublisherReg = null;
 
+		Activator.plugin = null;
 		super.stop(context);
 	}
 
@@ -85,6 +90,15 @@ public class Activator extends RienaActivator {
 			}
 		}
 
+	}
+
+	/**
+	 * Get the plugin instance.
+	 * 
+	 * @return
+	 */
+	public static Activator getDefault() {
+		return plugin;
 	}
 
 }
