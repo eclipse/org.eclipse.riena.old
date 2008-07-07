@@ -7,3 +7,4 @@ Bundle-Activator: org.eclipse.riena.internal.security.common.bootpolicy.Activato
 Require-Bundle: org.eclipse.core.runtime
 Eclipse-LazyStart: true
 Export-Package: org.eclipse.riena.security.common.bootpolicy
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
