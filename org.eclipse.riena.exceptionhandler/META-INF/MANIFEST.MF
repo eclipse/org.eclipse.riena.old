@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Riena ExceptionHandler (Incubation)
 Bundle-SymbolicName: org.eclipse.riena.exceptionhandler
-Bundle-Version: 1.0.0.M3
+Bundle-Version: 1.0.0.M4
 Bundle-Activator: org.eclipse.riena.internal.exceptionhandler.Activator
 Eclipse-LazyStart: true
 Import-Package: org.eclipse.equinox.log,
