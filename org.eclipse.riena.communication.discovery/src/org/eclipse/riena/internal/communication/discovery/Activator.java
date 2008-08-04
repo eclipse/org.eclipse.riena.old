@@ -52,7 +52,7 @@ public class Activator extends RienaActivator {
 		discovery.start();
 
 		servicePublisherReg = factory.createAndRegisterProxy(IServicePublishEventDispatcher.class,
-				"http://${hostname}/hessian/ServicePublisherWS", "hessian", null, HOST_ID);
+				"http://${riena.hostname}/hessian/ServicePublisherWS", "hessian", null, HOST_ID);
 
 		ProtocolNotifier protNotifier = new ProtocolNotifier();
 		context.addServiceListener(protNotifier, "(objectClass=" + IRemoteServiceFactory.class.getName() + ")");
