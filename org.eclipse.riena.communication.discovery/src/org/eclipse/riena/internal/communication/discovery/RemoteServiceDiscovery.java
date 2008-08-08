@@ -57,8 +57,8 @@ public class RemoteServiceDiscovery {
 	private synchronized RemoteServiceDescription[] getAllServices() {
 		ServiceReference refPublisher = context.getServiceReference(IServicePublishEventDispatcher.class.getName());
 		if (refPublisher == null) {
-			LOGGER.log(LogService.LOG_WARNING, "no IServicePublishEventDispatcher service available ["
-					+ IServicePublishEventDispatcher.class.getName() + "]");
+			LOGGER.log(LogService.LOG_WARNING, "no IServicePublishEventDispatcher service available [" //$NON-NLS-1$
+					+ IServicePublishEventDispatcher.class.getName() + "]"); //$NON-NLS-1$
 			return EMPTY_SERVICE_ENTRY_ARRAY;
 		}
 		IServicePublishEventDispatcher servicePublisher = (IServicePublishEventDispatcher) context
@@ -111,12 +111,12 @@ public class RemoteServiceDiscovery {
 			Class<?> interfaceClass = loadClass(rsDesc);
 			rsDesc.setServiceInterfaceClass(interfaceClass);
 
-			LOGGER.log(LogService.LOG_DEBUG, "creating service with uri=" + rsDesc.getURL());
+			LOGGER.log(LogService.LOG_DEBUG, "creating service with uri=" + rsDesc.getURL()); //$NON-NLS-1$
 			IRemoteServiceReference rsRef = createReference(rsDesc);
 			if (rsRef != null) {
 				rsReferences.add(rsRef);
 			} else {
-				LOGGER.log(LogService.LOG_DEBUG, "*****************");
+				LOGGER.log(LogService.LOG_DEBUG, "*****************"); //$NON-NLS-1$
 				addAsUnpublished(rsDesc);
 			}
 
@@ -166,7 +166,7 @@ public class RemoteServiceDiscovery {
 			return new RemoteServiceFactory().loadClass(interfaceClassName);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException("Could not create web service interface for [" + interfaceClassName + "]", e);
+			throw new RuntimeException("Could not create web service interface for [" + interfaceClassName + "]", e); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -190,7 +190,7 @@ public class RemoteServiceDiscovery {
 					updateInRegistry(serviceDescriptions);
 				}
 			} catch (HessianRuntimeException ex) {
-				LOGGER.log(LogService.LOG_ERROR, "update of services from server failed. " + ex.getLocalizedMessage());
+				LOGGER.log(LogService.LOG_ERROR, "update of services from server failed. " + ex.getLocalizedMessage()); //$NON-NLS-1$
 			}
 		}
 	}

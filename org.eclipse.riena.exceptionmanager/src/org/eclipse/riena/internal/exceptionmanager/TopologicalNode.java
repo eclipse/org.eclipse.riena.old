@@ -51,6 +51,6 @@ public class TopologicalNode<T> {
 
 	@Override
 	public String toString() {
-		return "[" + name + ",<-" + pointToMe + "]";
+		return "[" + name + ",<-" + pointToMe + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 }

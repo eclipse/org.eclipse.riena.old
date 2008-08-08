@@ -52,10 +52,10 @@ public class Activator extends RienaActivator {
 		discovery.start();
 
 		servicePublisherReg = factory.createAndRegisterProxy(IServicePublishEventDispatcher.class,
-				"http://${riena.hostname}/hessian/ServicePublisherWS", "hessian", null, HOST_ID);
+				"http://${riena.hostname}/hessian/ServicePublisherWS", "hessian", null, HOST_ID); //$NON-NLS-1$ //$NON-NLS-2$
 
 		ProtocolNotifier protNotifier = new ProtocolNotifier();
-		context.addServiceListener(protNotifier, "(objectClass=" + IRemoteServiceFactory.class.getName() + ")");
+		context.addServiceListener(protNotifier, "(objectClass=" + IRemoteServiceFactory.class.getName() + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		// ToDo Service Update Listener
 

@@ -10,9 +10,10 @@
  *******************************************************************************/
 package org.eclipse.riena.internal.exceptionhandler;
 
-import org.eclipse.equinox.log.Logger;
 import org.eclipse.riena.core.exception.IExceptionHandler;
 import org.eclipse.riena.core.exception.IExceptionHandlerManager.Action;
+
+import org.eclipse.equinox.log.Logger;
 import org.osgi.service.log.LogService;
 
 /**
@@ -23,7 +24,7 @@ public class DefaultExceptionHandler implements IExceptionHandler {
 	/**
 	 * This handler name is "riena.exceptionhandler.default"
 	 */
-	public static final String NAME = "riena.exceptionhandler.default";
+	public static final String NAME = "riena.exceptionhandler.default"; //$NON-NLS-1$
 
 	/**
 	 * this handler will not be invoked before any other handler

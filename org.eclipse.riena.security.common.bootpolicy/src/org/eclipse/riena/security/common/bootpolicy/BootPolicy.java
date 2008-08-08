@@ -45,7 +45,7 @@ public class BootPolicy extends Policy {
 	 */
 	@Override
 	public PermissionCollection getPermissions(CodeSource codesource) {
-		System.out.println("defaultPolicy: getPermissions");
+		System.out.println("defaultPolicy: getPermissions"); //$NON-NLS-1$
 		// if (realPolicy != null) {
 		// return realPolicy.getPermissions(codesource);
 		// }
@@ -60,7 +60,7 @@ public class BootPolicy extends Policy {
 	 */
 	@Override
 	public void refresh() {
-		System.out.println("defaultPolicy: refresh");
+		System.out.println("defaultPolicy: refresh"); //$NON-NLS-1$
 		// if (realPolicy != null) {
 		// realPolicy.refresh();
 		// }
@@ -69,7 +69,7 @@ public class BootPolicy extends Policy {
 
 	@Override
 	public PermissionCollection getPermissions(ProtectionDomain domain) {
-		System.out.println("defaultPolicy: getPermissions");
+		System.out.println("defaultPolicy: getPermissions"); //$NON-NLS-1$
 		// if (realPolicy != null) {
 		// return realPolicy.getPermissions(domain);
 		// }
@@ -78,17 +78,17 @@ public class BootPolicy extends Policy {
 
 	@Override
 	public boolean implies(ProtectionDomain domain, Permission permission) {
-		System.out.print("(X)");
+		System.out.print("(X)"); //$NON-NLS-1$
 		// if (realPolicy != null) {
 		// return realPolicy.implies(domain, permission);
 		// }
 		boolean perm = defaultPolicy.implies(domain, permission);
 		if (!perm) {
-			if (permission.getClass().getName().contains("ApplicationAdminPermission")) {
-				System.err.println("allow ApplicationAdminPermission");
+			if (permission.getClass().getName().contains("ApplicationAdminPermission")) { //$NON-NLS-1$
+				System.err.println("allow ApplicationAdminPermission"); //$NON-NLS-1$
 				return true;
 			}
-			System.out.println("not allowed to " + permission);
+			System.out.println("not allowed to " + permission); //$NON-NLS-1$
 		}
 		return perm;
 		// return true; // TODO return true while there is no REAL POLICY
