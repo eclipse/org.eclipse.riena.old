@@ -18,6 +18,7 @@ import org.eclipse.riena.communication.core.publisher.IServicePublishEventDispat
 import org.eclipse.riena.core.RienaActivator;
 import org.eclipse.riena.core.injector.Inject;
 import org.eclipse.riena.core.service.ServiceInjector;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
@@ -26,7 +27,7 @@ public class Activator extends RienaActivator {
 
 	private RemoteServiceDiscovery discovery;
 	private ServiceInjector registryInjector;
-	private String HOST_ID = Activator.class.getName();
+	private final static String HOSTID = Activator.class.getName();
 	private IRemoteServiceRegistration servicePublisherReg;
 
 	// The shared instance
@@ -52,7 +53,7 @@ public class Activator extends RienaActivator {
 		discovery.start();
 
 		servicePublisherReg = factory.createAndRegisterProxy(IServicePublishEventDispatcher.class,
-				"http://${riena.hostname}/hessian/ServicePublisherWS", "hessian", null, HOST_ID); //$NON-NLS-1$ //$NON-NLS-2$
+				"http://${riena.hostname}/hessian/ServicePublisherWS", "hessian", null, HOSTID); //$NON-NLS-1$ //$NON-NLS-2$
 
 		ProtocolNotifier protNotifier = new ProtocolNotifier();
 		context.addServiceListener(protNotifier, "(objectClass=" + IRemoteServiceFactory.class.getName() + ")"); //$NON-NLS-1$ //$NON-NLS-2$
