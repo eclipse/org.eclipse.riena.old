@@ -21,6 +21,10 @@ import java.util.Map;
  */
 public class TopologicalSort {
 
+	private TopologicalSort() {
+		// utility class
+	}
+
 	public static <T> List<T> sort(List<TopologicalNode<T>> nodes) {
 		Map<String, TopologicalNode<T>> topSort = new HashMap<String, TopologicalNode<T>>(nodes.size());
 		for (TopologicalNode<T> node : nodes) {

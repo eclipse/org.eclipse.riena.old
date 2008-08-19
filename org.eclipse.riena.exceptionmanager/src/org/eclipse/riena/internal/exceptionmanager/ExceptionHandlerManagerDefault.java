@@ -52,7 +52,9 @@ public class ExceptionHandlerManagerDefault implements IExceptionHandlerManager 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.riena.core.exception.IExceptionHandlerManager#handleCaught(java.lang.Throwable)
+	 * @see
+	 * org.eclipse.riena.core.exception.IExceptionHandlerManager#handleCaught
+	 * (java.lang.Throwable)
 	 */
 	public Action handleCaught(Throwable t) {
 		return handleCaught(t, null, null);
@@ -61,8 +63,9 @@ public class ExceptionHandlerManagerDefault implements IExceptionHandlerManager 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.riena.core.exception.IExceptionHandlerManager#handleCaught(java.lang.Throwable,
-	 *      org.eclipse.equinox.log.Logger)
+	 * @see
+	 * org.eclipse.riena.core.exception.IExceptionHandlerManager#handleCaught
+	 * (java.lang.Throwable, org.eclipse.equinox.log.Logger)
 	 */
 	public Action handleCaught(Throwable t, Logger logger) {
 		return handleCaught(t, null, logger);
@@ -71,8 +74,9 @@ public class ExceptionHandlerManagerDefault implements IExceptionHandlerManager 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.riena.core.exception.IExceptionHandlerManager#handleCaught(java.lang.Throwable,
-	 *      java.lang.String)
+	 * @see
+	 * org.eclipse.riena.core.exception.IExceptionHandlerManager#handleCaught
+	 * (java.lang.Throwable, java.lang.String)
 	 */
 	public Action handleCaught(Throwable t, String msg) {
 		return handleCaught(t, msg, null);
@@ -81,35 +85,35 @@ public class ExceptionHandlerManagerDefault implements IExceptionHandlerManager 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.riena.core.exception.IExceptionHandlerManager#handleCaught(java.lang.Throwable,
-	 *      java.lang.String, org.eclipse.equinox.log.Logger)
+	 * @see
+	 * org.eclipse.riena.core.exception.IExceptionHandlerManager#handleCaught
+	 * (java.lang.Throwable, java.lang.String, org.eclipse.equinox.log.Logger)
 	 */
 	public Action handleCaught(Throwable t, String msg, Logger logger) {
-		Action action = Action.NotHandled;
 		for (IExceptionHandler handler : handlers) {
-			action = handler.handleCaught(t, msg, logger);
+			Action action = handler.handleCaught(t, msg, logger);
 			if (action != Action.NotHandled) {
-				break;
+				return action;
 			}
 		}
-		return action;
+		return Action.NotHandled;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.riena.core.exception.IExceptionHandlerManager#handleUncaught(java.lang.Throwable,
-	 *      java.lang.Object, org.eclipse.equinox.log.Logger)
+	 * @see
+	 * org.eclipse.riena.core.exception.IExceptionHandlerManager#handleUncaught
+	 * (java.lang.Throwable, java.lang.Object, org.eclipse.equinox.log.Logger)
 	 */
 	public Action handleUncaught(Throwable t, String msg, Logger logger) {
-		Action action = Action.NotHandled;
 		for (IExceptionHandler handler : handlers) {
-			action = handler.handleUncaught(t, msg, logger);
+			Action action = handler.handleUncaught(t, msg, logger);
 			if (action != Action.NotHandled) {
-				break;
+				return action;
 			}
 		}
-		return action;
+		return Action.NotHandled;
 	}
 
 }
