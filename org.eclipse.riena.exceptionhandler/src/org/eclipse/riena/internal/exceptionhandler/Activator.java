@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 compeople AG and others.
+ * Copyright (c) 2007, 2008 compeople AG and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,10 +10,9 @@
  *******************************************************************************/
 package org.eclipse.riena.internal.exceptionhandler;
 
-import java.util.Hashtable;
-
 import org.eclipse.riena.core.RienaActivator;
 import org.eclipse.riena.core.exception.IExceptionHandler;
+import org.eclipse.riena.core.service.ServiceDescriptor;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
@@ -34,10 +33,10 @@ public class Activator extends RienaActivator {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		Activator.plugin = this;
-		DefaultExceptionHandler handler = new DefaultExceptionHandler();
 
-		Hashtable<String, String> properties = new Hashtable<String, String>(0);
-		handlerReg = context.registerService(IExceptionHandler.class.getName(), handler, properties);
+		DefaultExceptionHandler handler = new DefaultExceptionHandler();
+		handlerReg = context.registerService(IExceptionHandler.class.getName(), handler, ServiceDescriptor
+				.newDefaultServiceProperties());
 	}
 
 	/*
