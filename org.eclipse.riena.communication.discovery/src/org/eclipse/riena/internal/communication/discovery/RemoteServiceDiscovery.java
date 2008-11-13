@@ -42,7 +42,7 @@ public class RemoteServiceDiscovery {
 	private Map<String, RemoteServiceDescription> unpublishedServices = new HashMap<String, RemoteServiceDescription>();
 	private BundleContext context;
 
-	private final static Logger LOGGER = Activator.getDefault().getLogger(RemoteServiceDiscovery.class.getName());
+	private final static Logger LOGGER = Activator.getDefault().getLogger(RemoteServiceDiscovery.class);
 
 	RemoteServiceDiscovery(BundleContext context) {
 		super();
