@@ -10,13 +10,9 @@
  *******************************************************************************/
 package org.eclipse.riena.internal.exceptionmanager;
 
-import java.util.Hashtable;
-
 import org.eclipse.riena.core.RienaActivator;
-import org.eclipse.riena.core.exception.IExceptionHandler;
-import org.eclipse.riena.core.exception.IExceptionHandlerManager;
-import org.eclipse.riena.core.injector.Inject;
 import org.eclipse.riena.core.service.ServiceInjector;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
@@ -38,7 +34,6 @@ public class Activator extends RienaActivator {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		Activator.plugin = this;
-		registerExceptionHandlerManager();
 	}
 
 	/*
@@ -63,14 +58,6 @@ public class Activator extends RienaActivator {
 	}
 
 	private void registerExceptionHandlerManager() {
-		ExceptionHandlerManagerDefault handlerManager = new ExceptionHandlerManagerDefault();
-		String handlerId = IExceptionHandler.class.getName();
-
-		handlerManagerInjector = Inject.service(handlerId).into(handlerManager).andStart(getContext());
-
-		Hashtable<String, String> properties = new Hashtable<String, String>(0);
-		handlerManagerReg = getContext().registerService(IExceptionHandlerManager.class.getName(), handlerManager,
-				properties);
 	}
 
 	private void unregisterExceptionHandlerManager() {
