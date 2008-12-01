@@ -11,8 +11,7 @@
 package org.eclipse.riena.internal.exceptionhandler;
 
 import org.eclipse.riena.core.RienaActivator;
-import org.eclipse.riena.core.RienaConstants;
-import org.eclipse.riena.core.exception.IExceptionHandler;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
@@ -34,9 +33,6 @@ public class Activator extends RienaActivator {
 		super.start(context);
 		Activator.plugin = this;
 
-		DefaultExceptionHandler handler = new DefaultExceptionHandler();
-		handlerReg = context.registerService(IExceptionHandler.class.getName(), handler, RienaConstants
-				.newDefaultServiceProperties());
 	}
 
 	/*
