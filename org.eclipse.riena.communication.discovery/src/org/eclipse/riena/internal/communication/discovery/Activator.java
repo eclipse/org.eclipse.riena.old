@@ -27,7 +27,6 @@ public class Activator extends RienaActivator {
 
 	private RemoteServiceDiscovery discovery;
 	private ServiceInjector registryInjector;
-	private final static String HOSTID = Activator.class.getName();
 	private IRemoteServiceRegistration servicePublisherReg;
 
 	// The shared instance
@@ -53,7 +52,7 @@ public class Activator extends RienaActivator {
 		discovery.start();
 
 		servicePublisherReg = factory.createAndRegisterProxy(IServicePublishEventDispatcher.class,
-				"http://${riena.hostname}/hessian/ServicePublisherWS", "hessian", HOSTID); //$NON-NLS-1$ //$NON-NLS-2$
+				"http://${riena.hostname}/hessian/ServicePublisherWS", "hessian", context); //$NON-NLS-1$ //$NON-NLS-2$
 
 		ProtocolNotifier protNotifier = new ProtocolNotifier();
 		context.addServiceListener(protNotifier, "(objectClass=" + IRemoteServiceFactory.class.getName() + ")"); //$NON-NLS-1$ //$NON-NLS-2$

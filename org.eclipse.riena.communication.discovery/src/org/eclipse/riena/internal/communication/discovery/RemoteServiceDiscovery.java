@@ -17,13 +17,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import org.eclipse.equinox.log.Logger;
 import org.eclipse.riena.communication.core.IRemoteServiceReference;
 import org.eclipse.riena.communication.core.IRemoteServiceRegistration;
 import org.eclipse.riena.communication.core.IRemoteServiceRegistry;
 import org.eclipse.riena.communication.core.RemoteServiceDescription;
 import org.eclipse.riena.communication.core.factory.RemoteServiceFactory;
 import org.eclipse.riena.communication.core.publisher.IServicePublishEventDispatcher;
+
+import org.eclipse.equinox.log.Logger;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
@@ -99,7 +100,7 @@ public class RemoteServiceDiscovery {
 		// all other paths are now longer in the current list rsDescriptions and
 		// have to be unpublished if they were created with my HOST_ID
 		for (IRemoteServiceRegistration serviceReg : existingPathsMap.values()) {
-			if (serviceReg.getReference().getHostId().equals(HOST_ID)) {
+			if (serviceReg.getReference().getContext().equals(Activator.getDefault().getContext())) {
 				serviceReg.unregister();
 			}
 		}
@@ -123,13 +124,13 @@ public class RemoteServiceDiscovery {
 		}
 		for (IRemoteServiceReference rsRef : rsReferences) {
 			// publish the new remote service references in the registry
-			registry.registerService(rsRef);
+			registry.registerService(rsRef, Activator.getDefault().getContext());
 		}
 	}
 
 	private IRemoteServiceReference createReference(RemoteServiceDescription rsDesc) {
 		IRemoteServiceReference rsRef = rsFactory.createProxy(rsDesc);
-		rsRef.setHostId(HOST_ID);
+		rsRef.setContext(Activator.getDefault().getContext());
 		return rsRef;
 	}
 
@@ -145,7 +146,7 @@ public class RemoteServiceDiscovery {
 				IRemoteServiceReference rsRef = createReference(rsDesc);
 
 				if (rsRef != null) {
-					registry.registerService(rsRef);
+					registry.registerService(rsRef, Activator.getDefault().getContext());
 					set.remove(entry); // also removes the entry from the map
 				}
 			}
@@ -198,7 +199,8 @@ public class RemoteServiceDiscovery {
 	void stop() {
 		if (registry != null) {
 			// unregister all services I registered
-			List<IRemoteServiceRegistration> registeredServices = registry.registeredServices(HOST_ID);
+			List<IRemoteServiceRegistration> registeredServices = registry.registeredServices(Activator.getDefault()
+					.getContext());
 			for (IRemoteServiceRegistration rsReg : registeredServices) {
 				rsReg.unregister();
 			}
