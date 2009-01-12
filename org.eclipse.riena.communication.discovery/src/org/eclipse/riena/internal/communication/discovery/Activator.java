@@ -18,7 +18,6 @@ import org.eclipse.riena.communication.core.publisher.IServicePublishEventDispat
 import org.eclipse.riena.core.RienaActivator;
 import org.eclipse.riena.core.injector.Inject;
 import org.eclipse.riena.core.service.ServiceInjector;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
@@ -32,13 +31,7 @@ public class Activator extends RienaActivator {
 	// The shared instance
 	private static Activator plugin;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext
-	 * )
-	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		Activator.plugin = this;
@@ -62,12 +55,7 @@ public class Activator extends RienaActivator {
 		discovery.update();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
-	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		discovery.stop();
 		registryInjector.stop();

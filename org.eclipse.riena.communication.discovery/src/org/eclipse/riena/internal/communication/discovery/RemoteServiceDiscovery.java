@@ -17,14 +17,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import org.eclipse.equinox.log.Logger;
 import org.eclipse.riena.communication.core.IRemoteServiceReference;
 import org.eclipse.riena.communication.core.IRemoteServiceRegistration;
 import org.eclipse.riena.communication.core.IRemoteServiceRegistry;
 import org.eclipse.riena.communication.core.RemoteServiceDescription;
 import org.eclipse.riena.communication.core.factory.RemoteServiceFactory;
 import org.eclipse.riena.communication.core.publisher.IServicePublishEventDispatcher;
-
-import org.eclipse.equinox.log.Logger;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
@@ -36,7 +35,7 @@ import com.caucho.hessian.client.HessianRuntimeException;
  * 
  */
 public class RemoteServiceDiscovery {
-	private static final String HOST_ID = RemoteServiceDiscovery.class.getName();
+	// private static final String HOST_ID = RemoteServiceDiscovery.class.getName();
 	private static final RemoteServiceDescription[] EMPTY_SERVICE_ENTRY_ARRAY = new RemoteServiceDescription[0];
 	private IRemoteServiceRegistry registry;
 	private RemoteServiceFactory rsFactory;
