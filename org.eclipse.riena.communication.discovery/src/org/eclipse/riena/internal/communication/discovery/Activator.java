@@ -17,7 +17,7 @@ import org.eclipse.riena.communication.core.factory.RemoteServiceFactory;
 import org.eclipse.riena.communication.core.publisher.IServicePublishEventDispatcher;
 import org.eclipse.riena.core.RienaActivator;
 import org.eclipse.riena.core.injector.Inject;
-import org.eclipse.riena.core.service.ServiceInjector;
+import org.eclipse.riena.core.injector.service.ServiceInjector;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
