@@ -24,6 +24,7 @@ import org.eclipse.riena.communication.core.IRemoteServiceRegistry;
 import org.eclipse.riena.communication.core.RemoteServiceDescription;
 import org.eclipse.riena.communication.core.factory.RemoteServiceFactory;
 import org.eclipse.riena.communication.core.publisher.IServicePublishEventDispatcher;
+import org.eclipse.riena.core.Log4r;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
@@ -42,7 +43,7 @@ public class RemoteServiceDiscovery {
 	private Map<String, RemoteServiceDescription> unpublishedServices = new HashMap<String, RemoteServiceDescription>();
 	private BundleContext context;
 
-	private final static Logger LOGGER = Activator.getDefault().getLogger(RemoteServiceDiscovery.class);
+	private final static Logger LOGGER = Log4r.getLogger(Activator.getDefault(), RemoteServiceDiscovery.class);
 
 	RemoteServiceDiscovery(BundleContext context) {
 		super();
