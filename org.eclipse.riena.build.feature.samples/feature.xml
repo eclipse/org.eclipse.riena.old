@@ -6,27 +6,24 @@
 
    <description url="http://www.example.com/description">
       This feature contains the corresponding components for Riena
-Samples 
-that is intended to be added to target platforms at development
+Samples. It is intended to be added to target platforms at development
 time. It also requires Equinox SDK and RCP SDK and Riena Core
-SdK to resolve all
-dependencies.
-DONT INSTALL into your Eclipse IDE. Only install into your target
+SDK to resolve all dependencies.
+DO NOT INSTALL into your Eclipse IDE. Only install into your target
 platform.
    </description>
 
    <copyright url="http://www.example.com/copyright">
-      /*******************************************************************************
-* Copyright (c) 2007, 2008 compeople AG and others.
-* All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License
-v1.0
-* which accompanies this distribution, and is available at
-* http://www.eclipse.org/legal/epl-v10.html
-*
-* Contributors:
-*    compeople AG - initial API and implementation
-*******************************************************************************/
+/*******************************************************************************
+ * Copyright (c) 2007, 2008 compeople AG and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    compeople AG - initial API and implementation
+ *******************************************************************************/
    </copyright>
 
    <license url="http://www.example.com/license">
