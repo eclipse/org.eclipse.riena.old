@@ -108,7 +108,28 @@ platform.
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.riena.tests"
+         id="org.eclipse.riena.communication.sample.pingpong.client"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.riena.communication.sample.pingpong.client.config"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.riena.communication.sample.pingpong.common"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.riena.communication.sample.pingpong.server"
          download-size="0"
          install-size="0"
          version="0.0.0"
