@@ -17,7 +17,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import com.caucho.hessian.client.HessianRuntimeException;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.log.LogService;
+
 import org.eclipse.equinox.log.Logger;
+
 import org.eclipse.riena.communication.core.IRemoteServiceReference;
 import org.eclipse.riena.communication.core.IRemoteServiceRegistration;
 import org.eclipse.riena.communication.core.IRemoteServiceRegistry;
@@ -25,15 +32,9 @@ import org.eclipse.riena.communication.core.RemoteServiceDescription;
 import org.eclipse.riena.communication.core.factory.RemoteServiceFactory;
 import org.eclipse.riena.communication.core.publisher.IServicePublishEventDispatcher;
 import org.eclipse.riena.core.Log4r;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.log.LogService;
-
-import com.caucho.hessian.client.HessianRuntimeException;
 
 /**
- * @author Alexander Ziegler
- * 
+ * TODO: JavaDoc
  */
 public class RemoteServiceDiscovery {
 	// private static final String HOST_ID = RemoteServiceDiscovery.class.getName();
