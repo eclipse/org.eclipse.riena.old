@@ -8,9 +8,7 @@ Import-Package: com.caucho.hessian.client,
  org.osgi.framework;version="1.4.0",
  org.osgi.service.log;version="1.3.0"
 Require-Bundle: org.eclipse.riena.communication.core,
- org.eclipse.riena.core,
- org.eclipse.equinox.log;bundle-version="1.1.0",
- org.eclipse.core.runtime
+ org.eclipse.riena.core
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.riena.internal.communication.discovery;x-internal:=true
