@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Riena Communication Discovery 
 Bundle-SymbolicName: org.eclipse.riena.communication.discovery
-Bundle-Version: 2.0.0.qualifier
+Bundle-Version: 2.1.0.qualifier
 Bundle-Activator: org.eclipse.riena.internal.communication.discovery.Activator
 Import-Package: com.caucho.hessian.client,
  org.osgi.framework;version="1.4.0",
