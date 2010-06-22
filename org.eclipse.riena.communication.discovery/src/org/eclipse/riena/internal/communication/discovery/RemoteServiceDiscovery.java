@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.caucho.hessian.client.HessianRuntimeException;
 
@@ -41,12 +41,12 @@ public class RemoteServiceDiscovery {
 	private static final RemoteServiceDescription[] EMPTY_SERVICE_ENTRY_ARRAY = new RemoteServiceDescription[0];
 	private IRemoteServiceRegistry registry;
 	private RemoteServiceFactory rsFactory;
-	private Map<String, RemoteServiceDescription> unpublishedServices = new HashMap<String, RemoteServiceDescription>();
-	private BundleContext context;
+	private final Map<String, RemoteServiceDescription> unpublishedServices = new HashMap<String, RemoteServiceDescription>();
+	private final BundleContext context;
 
 	private final static Logger LOGGER = Log4r.getLogger(Activator.getDefault(), RemoteServiceDiscovery.class);
 
-	RemoteServiceDiscovery(BundleContext context) {
+	RemoteServiceDiscovery(final BundleContext context) {
 		super();
 		this.context = context;
 	}
@@ -57,16 +57,17 @@ public class RemoteServiceDiscovery {
 	 * @return
 	 */
 	private synchronized RemoteServiceDescription[] getAllServices() {
-		ServiceReference refPublisher = context.getServiceReference(IServicePublishEventDispatcher.class.getName());
+		final ServiceReference refPublisher = context.getServiceReference(IServicePublishEventDispatcher.class
+				.getName());
 		if (refPublisher == null) {
 			LOGGER.log(LogService.LOG_WARNING, "no IServicePublishEventDispatcher service available [" //$NON-NLS-1$
 					+ IServicePublishEventDispatcher.class.getName() + "]"); //$NON-NLS-1$
 			return EMPTY_SERVICE_ENTRY_ARRAY;
 		}
-		IServicePublishEventDispatcher servicePublisher = (IServicePublishEventDispatcher) context
+		final IServicePublishEventDispatcher servicePublisher = (IServicePublishEventDispatcher) context
 				.getService(refPublisher);
 		try {
-			RemoteServiceDescription[] rsDescriptions = servicePublisher.getAllServices();
+			final RemoteServiceDescription[] rsDescriptions = servicePublisher.getAllServices();
 			if (rsDescriptions == null) {
 				return EMPTY_SERVICE_ENTRY_ARRAY;
 			}
@@ -76,21 +77,21 @@ public class RemoteServiceDiscovery {
 		}
 	}
 
-	private synchronized void updateInRegistry(RemoteServiceDescription[] rsDescriptions) {
+	private synchronized void updateInRegistry(final RemoteServiceDescription[] rsDescriptions) {
 		// get all services not just the service created with discovery
-		List<IRemoteServiceRegistration> registeredServices = registry.registeredServices(null);
-		Map<String, IRemoteServiceRegistration> existingPathsMap = new HashMap<String, IRemoteServiceRegistration>();
+		final List<IRemoteServiceRegistration> registeredServices = registry.registeredServices(null);
+		final Map<String, IRemoteServiceRegistration> existingPathsMap = new HashMap<String, IRemoteServiceRegistration>();
 		// copy array to Map
-		for (IRemoteServiceRegistration registeredService : registeredServices) {
-			String url = registeredService.getReference().getURL();
+		for (final IRemoteServiceRegistration registeredService : registeredServices) {
+			final String url = registeredService.getReference().getURL();
 			existingPathsMap.put(url, registeredService);
 		}
 
 		// newServices contains those that did not exist previously
-		List<RemoteServiceDescription> newServices = new ArrayList<RemoteServiceDescription>();
+		final List<RemoteServiceDescription> newServices = new ArrayList<RemoteServiceDescription>();
 		// remove those that still exist in the new list from the list of
 		// existing paths
-		for (RemoteServiceDescription rsDescription : rsDescriptions) {
+		for (final RemoteServiceDescription rsDescription : rsDescriptions) {
 			if (existingPathsMap.get(rsDescription.getURL()) != null) {
 				existingPathsMap.remove(rsDescription.getURL());
 			} else {
@@ -100,7 +101,7 @@ public class RemoteServiceDiscovery {
 
 		// all other paths are now longer in the current list rsDescriptions and
 		// have to be unpublished if they were created with my HOST_ID
-		for (IRemoteServiceRegistration serviceReg : existingPathsMap.values()) {
+		for (final IRemoteServiceRegistration serviceReg : existingPathsMap.values()) {
 			if (serviceReg.getReference().getContext().equals(Activator.getDefault().getContext())) {
 				serviceReg.unregister();
 			}
@@ -108,13 +109,13 @@ public class RemoteServiceDiscovery {
 
 		// go through the newService Descriptions and create a new proxy for
 		// each of them
-		List<IRemoteServiceReference> rsReferences = new ArrayList<IRemoteServiceReference>();
-		for (RemoteServiceDescription rsDesc : newServices) {
-			Class<?> interfaceClass = loadClass(rsDesc);
+		final List<IRemoteServiceReference> rsReferences = new ArrayList<IRemoteServiceReference>();
+		for (final RemoteServiceDescription rsDesc : newServices) {
+			final Class<?> interfaceClass = loadClass(rsDesc);
 			rsDesc.setServiceInterfaceClass(interfaceClass);
 
 			LOGGER.log(LogService.LOG_DEBUG, "creating service with uri=" + rsDesc.getURL()); //$NON-NLS-1$
-			IRemoteServiceReference rsRef = createReference(rsDesc);
+			final IRemoteServiceReference rsRef = createReference(rsDesc);
 			if (rsRef != null) {
 				rsReferences.add(rsRef);
 			} else {
@@ -123,28 +124,28 @@ public class RemoteServiceDiscovery {
 			}
 
 		}
-		for (IRemoteServiceReference rsRef : rsReferences) {
+		for (final IRemoteServiceReference rsRef : rsReferences) {
 			// publish the new remote service references in the registry
 			registry.registerService(rsRef, Activator.getDefault().getContext());
 		}
 	}
 
-	private IRemoteServiceReference createReference(RemoteServiceDescription rsDesc) {
-		IRemoteServiceReference rsRef = rsFactory.createProxy(rsDesc);
+	private IRemoteServiceReference createReference(final RemoteServiceDescription rsDesc) {
+		final IRemoteServiceReference rsRef = rsFactory.createProxy(rsDesc);
 		rsRef.setContext(Activator.getDefault().getContext());
 		return rsRef;
 	}
 
-	private void addAsUnpublished(RemoteServiceDescription rsDesc) {
+	private void addAsUnpublished(final RemoteServiceDescription rsDesc) {
 		unpublishedServices.put(rsDesc.getURL(), rsDesc);
 	}
 
-	protected void checkForUnpublishedServices(String protocol) {
-		Set<Entry<String, RemoteServiceDescription>> set = unpublishedServices.entrySet();
-		for (Map.Entry<String, RemoteServiceDescription> entry : set) {
-			RemoteServiceDescription rsDesc = entry.getValue();
+	protected void checkForUnpublishedServices(final String protocol) {
+		final Set<Entry<String, RemoteServiceDescription>> set = unpublishedServices.entrySet();
+		for (final Map.Entry<String, RemoteServiceDescription> entry : set) {
+			final RemoteServiceDescription rsDesc = entry.getValue();
 			if (rsDesc.getProtocol().equals(protocol)) {
-				IRemoteServiceReference rsRef = createReference(rsDesc);
+				final IRemoteServiceReference rsRef = createReference(rsDesc);
 
 				if (rsRef != null) {
 					registry.registerService(rsRef, Activator.getDefault().getContext());
@@ -155,28 +156,28 @@ public class RemoteServiceDiscovery {
 
 	}
 
-	private Class<?> loadClass(RemoteServiceDescription endpoint) {
+	private Class<?> loadClass(final RemoteServiceDescription endpoint) {
 		if (endpoint.getServiceInterfaceClass() != null) {
 			// Maybe the interface was transfered from server
 			return endpoint.getServiceInterfaceClass();
 		}
-		String interfaceClassName = endpoint.getServiceInterfaceClassName();
+		final String interfaceClassName = endpoint.getServiceInterfaceClassName();
 
 		try {
 			// Class loading: Maybe the host bundle of the interface is a buddy
 			// friend of the service registry
 			return new RemoteServiceFactory().loadClass(interfaceClassName);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("Could not create web service interface for [" + interfaceClassName + "]", e); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
-	public void bind(IRemoteServiceRegistry registry) {
+	public void bind(final IRemoteServiceRegistry registry) {
 		this.registry = registry;
 	}
 
-	public void unbind(IRemoteServiceRegistry registry) {
+	public void unbind(final IRemoteServiceRegistry registry) {
 		this.registry = registry;
 	}
 
@@ -187,11 +188,11 @@ public class RemoteServiceDiscovery {
 	void update() {
 		if (registry != null) {
 			try {
-				RemoteServiceDescription[] serviceDescriptions = getAllServices();
+				final RemoteServiceDescription[] serviceDescriptions = getAllServices();
 				if (serviceDescriptions.length > 0) {
 					updateInRegistry(serviceDescriptions);
 				}
-			} catch (HessianRuntimeException ex) {
+			} catch (final HessianRuntimeException ex) {
 				LOGGER.log(LogService.LOG_ERROR, "update of services from server failed. " + ex.getLocalizedMessage()); //$NON-NLS-1$
 			}
 		}
@@ -200,15 +201,15 @@ public class RemoteServiceDiscovery {
 	void stop() {
 		if (registry != null) {
 			// unregister all services I registered
-			List<IRemoteServiceRegistration> registeredServices = registry.registeredServices(Activator.getDefault()
-					.getContext());
-			for (IRemoteServiceRegistration rsReg : registeredServices) {
+			final List<IRemoteServiceRegistration> registeredServices = registry.registeredServices(Activator
+					.getDefault().getContext());
+			for (final IRemoteServiceRegistration rsReg : registeredServices) {
 				rsReg.unregister();
 			}
 		}
 	}
 
-	void setRemoteServiceFactory(RemoteServiceFactory remoteServiceFactory) {
+	void setRemoteServiceFactory(final RemoteServiceFactory remoteServiceFactory) {
 		this.rsFactory = remoteServiceFactory;
 	}
 }

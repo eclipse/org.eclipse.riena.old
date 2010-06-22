@@ -33,10 +33,10 @@ public class Activator extends RienaActivator {
 	private static Activator plugin;
 
 	@Override
-	public void start(BundleContext context) throws Exception {
+	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		Activator.plugin = this;
-		RemoteServiceFactory factory = new RemoteServiceFactory();
+		final RemoteServiceFactory factory = new RemoteServiceFactory();
 
 		discovery = new RemoteServiceDiscovery(context);
 		discovery.setRemoteServiceFactory(factory);
@@ -47,7 +47,7 @@ public class Activator extends RienaActivator {
 		servicePublisherReg = factory.createAndRegisterProxy(IServicePublishEventDispatcher.class,
 				"http://${riena.hostname}/hessian/ServicePublisherWS", "hessian", context); //$NON-NLS-1$ //$NON-NLS-2$
 
-		ProtocolNotifier protNotifier = new ProtocolNotifier();
+		final ProtocolNotifier protNotifier = new ProtocolNotifier();
 		context.addServiceListener(protNotifier, "(objectClass=" + IRemoteServiceFactory.class.getName() + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		// ToDo Service Update Listener
@@ -56,7 +56,7 @@ public class Activator extends RienaActivator {
 	}
 
 	@Override
-	public void stop(BundleContext context) throws Exception {
+	public void stop(final BundleContext context) throws Exception {
 		discovery.stop();
 		registryInjector.stop();
 		if (servicePublisherReg != null) {
@@ -71,9 +71,10 @@ public class Activator extends RienaActivator {
 	}
 
 	class ProtocolNotifier implements ServiceListener {
-		public void serviceChanged(ServiceEvent event) {
+		public void serviceChanged(final ServiceEvent event) {
 			if (event.getType() == ServiceEvent.REGISTERED) {
-				String protocol = (String) event.getServiceReference().getProperty(IRemoteServiceFactory.PROP_PROTOCOL);
+				final String protocol = (String) event.getServiceReference().getProperty(
+						IRemoteServiceFactory.PROP_PROTOCOL);
 				discovery.checkForUnpublishedServices(protocol);
 			}
 		}
